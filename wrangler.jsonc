@@ -1,0 +1,25 @@
+{
+  "name": "vinci",
+  "main": "src/worker.ts",
+  "compatibility_date": "2025-10-01",
+  "assets": {
+    "directory": "./public",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "vinci",
+      "database_id": "b5bd9258-3f53-4928-8b4f-e72c1167aacc",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Per-IP limits, enforced in the Worker. Writes are tight because a real player makes about 7 write calls a day.
+  "ratelimits": [
+    { "name": "WRITE_LIMITER", "namespace_id": "1001", "simple": { "limit": 20, "period": 60 } },
+    { "name": "READ_LIMITER", "namespace_id": "1002", "simple": { "limit": 120, "period": 60 } }
+  ],
+  // Cron runs in UTC. Midnight in Asia/Jerusalem is 21:00 UTC (summer) or 22:00 UTC (winter);
+  // both fire and the extra run is a harmless no-op because puzzle creation is idempotent.
+  "triggers": { "crons": ["1 21 * * *", "1 22 * * *"] }
+}

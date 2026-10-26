@@ -1,0 +1,700 @@
+<title>Vinci</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one narrow centered column on bright yellow. A three-cell progress strip on top, one clean card at a time below it. */
+:root {
+  --bg: #FFEC80;
+  --paper: #FF9F43;
+  --hi: #FFF8EC;
+  --ink: #2A1C04;
+  --muted: #5E3B08;
+  --line: #E8862C;
+  --chip: #FFB866;
+  --accent: #D92D16;
+  --accent-ink: #FFFFFF;
+  --accent-wash: rgba(217, 45, 22, 0.12);
+  --good: #0B5E3F;
+  --warn: #6E3300;
+  --bad: #9A1A12;
+  --shadow: rgba(160, 80, 0, 0.18);
+  --f-display: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
+  --f-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: light;
+  --f-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100%;
+  padding-block: 22px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 540px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+.top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brand { font-family: var(--f-display); font-weight: 700; font-size: 1.7rem; letter-spacing: -0.02em; line-height: 1; margin: 0; }
+.brand span { color: var(--accent); }
+.meta { font-family: var(--f-mono); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
+.tape { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.cell {
+  border: 1.5px solid transparent; background: var(--paper); border-radius: 12px;
+  padding: 8px 12px; min-width: 0; display: flex; flex-direction: column; gap: 2px;
+}
+.cell .lab { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.cell .val { font-family: var(--f-mono); font-weight: 600; font-size: 1.05rem; line-height: 1.2; color: var(--muted); }
+.cell.now { border-color: var(--accent); background: var(--accent-wash); }
+.cell.now .lab { color: var(--accent); }
+.cell.good .val { color: var(--good); }
+.cell.warn .val { color: var(--warn); }
+.cell.bad .val { color: var(--bad); }
+
+.card {
+  background: var(--paper); border-radius: 18px;
+  box-shadow: 0 1px 2px var(--shadow), 0 10px 30px var(--shadow); padding: 26px 22px; min-width: 0;
+}
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.chip {
+  font-family: var(--f-mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em;
+  background: var(--chip); color: var(--ink); padding: 4px 10px; border-radius: 999px;
+}
+.qno { font-family: var(--f-mono); font-size: 0.75rem; color: var(--muted); letter-spacing: 0.06em; }
+.q { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.4rem, 5.4vw, 1.8rem); line-height: 1.18; letter-spacing: -0.015em; margin: 0 0 18px; text-wrap: balance; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field input {
+  width: 100%; font-family: var(--f-mono); font-size: 1.65rem; font-weight: 500; color: var(--ink);
+  background: var(--hi); border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 16px; min-width: 0;
+}
+.field input:focus { border-color: var(--accent); }
+.field input:disabled { opacity: 0.75; }
+.field input::placeholder { color: var(--muted); opacity: 0.7; font-size: 1.1rem; }
+.unit { font-family: var(--f-mono); font-size: 0.78rem; color: var(--muted); letter-spacing: 0.03em; }
+.preview { display: block; min-height: 1.5em; margin-top: 8px; font-family: var(--f-mono); font-size: 0.95rem; color: var(--ink); }
+.preview.err { color: var(--bad); }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.btn {
+  font-family: var(--f-body); font-weight: 600; font-size: 1rem; line-height: 1.2; cursor: pointer;
+  border-radius: 12px; padding: 12px 20px; min-height: 48px; border: 1.5px solid transparent;
+}
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.ghost[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+.btn:hover { filter: brightness(1.06); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.keypad { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 14px; }
+.key {
+  font-family: var(--f-mono); font-size: 1.05rem; font-weight: 500; min-height: 46px; cursor: pointer;
+  background: var(--chip); color: var(--ink); border: 0; border-radius: 10px;
+}
+.key.op { background: var(--accent-wash); }
+.key.eq { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.key:active { transform: translateY(1px); }
+.hint { font-size: 0.82rem; color: var(--muted); margin: 10px 0 0; }
+
+.result { display: flex; flex-direction: column; gap: 24px; }
+.boxes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.box { border-radius: 16px; padding: 16px 16px 14px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.box.mine { background: var(--chip); }
+.box.truth { background: var(--hi); border: 3px solid var(--bg); box-shadow: 0 8px 22px var(--shadow); }
+.box .k { font-family: var(--f-mono); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.box .v { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.3rem, 5.4vw, 1.9rem); line-height: 1.1; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.box .full { font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted); overflow-wrap: anywhere; }
+.box .u { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+.landing { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.5fr); gap: 20px; }
+.landed { display: flex; flex-direction: column; gap: 2px; padding-right: 20px; border-right: 1px solid var(--line); min-width: 0; }
+.landed .mult { font-family: var(--f-display); font-weight: 700; font-size: 3rem; line-height: 1; letter-spacing: -0.03em; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.landed .dir { font-family: var(--f-display); font-weight: 700; font-size: 1.45rem; line-height: 1.15; }
+.landed .rank { font-size: 0.88rem; color: var(--muted); margin: 12px 0 0; }
+.landed .rank b { color: var(--ink); }
+.good { color: var(--good); }
+.warn { color: var(--warn); }
+.bad { color: var(--bad); }
+
+.hist { min-width: 0; display: flex; flex-direction: column; }
+.plot { position: relative; height: 140px; margin-top: 36px; border-bottom: 1px solid var(--line); }
+.bars { position: absolute; inset: 0; display: flex; align-items: flex-end; gap: 3px; }
+.bars span { flex: 1 1 0; min-width: 0; background: var(--ink); opacity: 0.22; border-radius: 3px 3px 0 0; transform-origin: bottom; }
+.bars.anim span { animation: grow .5s ease both; }
+@keyframes grow { from { transform: scaleY(0); } }
+.ansline { position: absolute; top: -6px; bottom: 0; left: 50%; border-left: 2px dashed var(--ink); opacity: 0.55; }
+.youline { position: absolute; top: -6px; bottom: 0; width: 3px; margin-left: -1.5px; background: currentColor; border-radius: 2px; }
+.youtag { position: absolute; top: -34px; transform: translateX(-50%); font-family: var(--f-mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; background: currentColor; padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
+.youtag span { color: var(--hi); }
+.axis { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; margin-top: 8px; font-family: var(--f-mono); font-size: 0.7rem; color: var(--muted); }
+.axis span:last-child { text-align: right; }
+.axis b { color: var(--ink); font-weight: 600; text-align: center; }
+.axis b small { display: block; font-size: 0.6rem; letter-spacing: 0.14em; color: var(--muted); font-weight: 500; }
+.hist-note { font-size: 0.8rem; color: var(--muted); margin: 8px 0 0; }
+
+.bottom { display: flex; justify-content: flex-end; }
+.nap-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 48px; padding: 12px 16px;
+  background: var(--chip); color: var(--ink); border: 0; border-radius: 12px; cursor: pointer;
+  font-family: var(--f-mono); font-weight: 600; font-size: 0.76rem; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.chev { flex: none; width: 8px; height: 8px; margin: 0 4px 4px 0; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform .2s ease; }
+.nap-btn[aria-expanded="true"] .chev { transform: translateY(4px) rotate(-135deg); }
+.nap-body { background: var(--chip); border-radius: 12px; padding: 14px 16px; font-size: 0.92rem; }
+.nap-body p { margin: 0 0 8px; }
+.nap-body p:last-child { margin: 0; }
+.sec-h { font-family: var(--f-mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+.note { font-size: 0.86rem; color: var(--muted); }
+.src { font-size: 0.82rem; color: var(--muted); }
+.src a { color: var(--accent); text-underline-offset: 2px; }
+@media (max-width: 520px) {
+  .landing { grid-template-columns: 1fr; gap: 6px; }
+  .landed { border-right: 0; padding-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+  .landed .mult { font-size: 2.6rem; }
+}
+
+.big { font-family: var(--f-display); font-weight: 700; font-size: 4.2rem; line-height: 1; letter-spacing: -0.03em; margin: 2px 0 4px; }
+.big span { font-size: 2.2rem; margin-left: 2px; }
+.eyebrow { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.rate-line { margin: 0 0 16px; color: var(--muted); }
+.rows { list-style: none; margin: 0 0 20px; padding: 0; display: flex; flex-direction: column; }
+.rows li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr) auto; gap: 10px; align-items: start; padding: 12px 0; border-top: 1px solid var(--line); }
+.rows .n { font-family: var(--f-mono); font-size: 0.78rem; color: var(--muted); padding-top: 2px; }
+.rows .t { font-size: 0.9rem; min-width: 0; overflow-wrap: anywhere; }
+.rows .t small { display: block; font-family: var(--f-mono); font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+.rows .m { font-family: var(--f-mono); font-weight: 600; font-size: 1rem; white-space: nowrap; }
+.share { margin: 0 0 12px; }
+.share pre { margin: 0 0 10px; padding: 12px 14px; background: var(--chip); border: 0; border-radius: 12px; font-family: var(--f-mono); font-size: 0.88rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.status { font-family: var(--f-mono); font-size: 0.78rem; color: var(--good); align-self: center; }
+.record { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 18px 0; }
+.record div { background: var(--chip); border-radius: 12px; padding: 8px 10px; min-width: 0; }
+.record .k { display: block; font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.record .v { display: block; font-family: var(--f-mono); font-weight: 600; font-size: 1.05rem; }
+
+.foot { font-size: 0.78rem; color: var(--muted); margin: 0; text-align: center; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  .bars.anim span { animation: none; }
+  .chev { transition: none; }
+}
+@media (max-width: 420px) {
+  .big { font-size: 3.5rem; }
+  .card { padding: 18px 14px 20px; }
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1 class="brand">Vinci<span>.</span></h1>
+    <div class="meta" id="meta"></div>
+  </header>
+  <nav class="tape" id="tape" aria-label="Progress"></nav>
+  <main id="stage"></main>
+  <p class="foot">Many answers are published estimates, not exact counts.</p>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- questions ---------- */
+  var Q = [
+    { id: 'google', topic: 'TECH', q: 'How many searches does Google handle worldwide on an average day?', unit: 'searches per day', answer: 14e9,
+      napkin: 'Roughly 5 billion people use Google and each runs about 3 searches a day, which gives about 15 billion.',
+      note: 'Google does not publish an exact figure. Published estimates run from about 8.5 to 16 billion a day. This one comes from a 5-trillion-a-year count.',
+      src: { label: 'Search Engine Land', url: 'https://searchengineland.com/google-5-trillion-searches-per-year-452928' }, asof: '2025 estimate' },
+    { id: 'email', topic: 'TECH', q: 'How many emails are sent and received worldwide on an average day in 2026?', unit: 'emails per day', answer: 392.5e9,
+      napkin: 'About 4.5 billion people use email and each handles around 85 messages a day, spam included. That is about 380 billion.',
+      note: 'This is a projection by Statista, reported by EmailToolTester, not a count.',
+      src: { label: 'EmailToolTester', url: 'https://www.emailtooltester.com/en/blog/how-many-emails-are-sent-per-day/' }, asof: '2026 projection' },
+    { id: 'iphone', topic: 'TECH', q: 'How many iPhones were sold worldwide in 2025?', unit: 'iPhones', answer: 247e6,
+      napkin: 'If about 1.5 billion iPhones are in use and each is replaced every six years or so, that is roughly 250 million new ones a year.',
+      note: 'Apple stopped reporting iPhone unit sales in 2019, so this is an IDC estimate.',
+      src: { label: 'SQ Magazine, citing IDC', url: 'https://sqmagazine.co.uk/how-many-iphones-sold/' }, asof: '2025 estimate' },
+    { id: 'linux', topic: 'CODE', q: 'How many lines are in the Linux kernel source tree, counting code, comments and blank lines?', unit: 'lines', answer: 40.98e6,
+      napkin: 'Linux 4.12 had about 24 million lines in 2017. The tree grows roughly 2 million lines a year, so nine years later you land near 42 million.',
+      note: 'Counts differ by tool, and one count puts the previous release above 43 million. About 6.5 million of these lines are a single GPU register dump.',
+      src: { label: 'Open Source For You, citing Phoronix', url: 'https://www.opensourceforu.com/2026/09/linux-kernel-heads-past-40-98m-lines-with-7-3-rc1/' }, asof: 'Linux 7.3-rc1, September 2026' },
+    { id: 'eqvol', group: 'equity', topic: 'MARKETS', q: 'How many shares changed hands per day, on average, across US stock markets in 2025?', unit: 'shares per day', answer: 17.6e9,
+      napkin: 'US stocks turn over about $1 trillion a day. At an average price near $60 a share, that is roughly 17 billion shares.',
+      note: 'Cboe counts every consolidated trade. The 2025 average was a record, up 44.6% on 2024.',
+      src: { label: 'Cboe, 2025 U.S. Equities Year in Review', url: 'https://www.cboe.com/insights/posts/2025-u-s-equities-year-in-review' }, asof: '2025 daily average' },
+    { id: 'eqnot', group: 'equity', topic: 'MARKETS', q: 'How many dollars of stock traded hands per day, on average, in US markets in 2025?', unit: 'US dollars per day', answer: 1.1e12,
+      napkin: 'About 17.6 billion shares a day at an average price around $60 comes to roughly $1 trillion.',
+      note: 'Cboe reports about $1.1 trillion. Its record single day was April 9, 2025, at $1.86 trillion.',
+      src: { label: 'Cboe, 2025 U.S. Equities Year in Review', url: 'https://www.cboe.com/insights/posts/2025-u-s-equities-year-in-review' }, asof: '2025 daily average' },
+    { id: 'btc', topic: 'CRYPTO', q: 'How many transactions did the Bitcoin network confirm per day, on average, in June 2026?', unit: 'transactions per day', answer: 651655,
+      napkin: 'A block arrives about every 10 minutes, so there are 144 a day. A busy month puts a few thousand transactions in each block, which gives 400,000 to 700,000.',
+      note: 'This counts confirmed on-chain transactions only. June was up 90% on June 2025.',
+      src: { label: 'GNCrypto, citing Blockchair', url: 'https://www.gncrypto.news/news/bitcoin-third-busiest-day-862979-transactions-june-23-2026/' }, asof: 'June 2026 average' },
+    { id: 'ghrepos', group: 'github', topic: 'CODE', q: 'How many repositories exist on GitHub, public and private combined?', unit: 'repositories', answer: 630e6,
+      napkin: 'GitHub has about 180 million developers. If each has 3 or 4 repositories (forks, experiments, private projects), that is around 600 million.',
+      note: 'Public repositories are about 63% of the total.',
+      src: { label: "It's FOSS, citing GitHub Octoverse", url: 'https://itsfoss.com/news/github-octoverse-2025/' }, asof: 'GitHub Octoverse 2025' },
+    { id: 'ghnew', group: 'github', topic: 'CODE', q: 'How many new repositories were created on GitHub every minute in 2025?', unit: 'new repositories per minute', answer: 230,
+      napkin: 'GitHub added about 121 million repositories in 2025. A year has about 525,600 minutes, and 121 million ÷ 525,600 is roughly 230.',
+      note: 'GitHub reports "230+" per minute.',
+      src: { label: "It's FOSS, citing GitHub Octoverse", url: 'https://itsfoss.com/news/github-octoverse-2025/' }, asof: 'GitHub Octoverse 2025' },
+    { id: 'listed', topic: 'MARKETS', q: 'How many publicly listed companies are there in the world?', unit: 'companies', answer: 53795,
+      napkin: 'Around 50 major exchanges, averaging about 1,000 listings each. India alone has more than 5,000 and the US several thousand, so the total lands near 50,000.',
+      note: 'Estimates run from about 47,000 to 58,000 depending on the source and the year.',
+      src: { label: 'WealthBriefing, citing Investopedia', url: 'https://www.wealthbriefing.com/html/printarticle.php?id=205692' }, asof: 'Recent estimate' },
+    { id: 'dc', topic: 'TECH', q: 'How many data centers operate in the United States?', unit: 'data centers', answer: 5427,
+      napkin: 'The US holds about 45% of the world’s data centers. If the world has around 12,000, that is roughly 5,400.',
+      note: 'The count depends heavily on what you call a data center. Other sources put the world total anywhere from 6,000 to over 50,000.',
+      src: { label: 'Cargoson data center roundup', url: 'https://www.cargoson.com/en/blog/number-of-data-centers-by-country' }, asof: 'November 2025' },
+    { id: 'tsmc', topic: 'CHIPS', q: 'How many 12-inch wafers can TSMC make in a year at full capacity?', unit: '12-inch equivalent wafers per year', answer: 17e6,
+      napkin: 'TSMC runs about nine 12-inch fabs. At roughly 150,000 wafers a month each, that is about 1.4 million a month, or close to 17 million a year.',
+      note: 'TSMC says capacity was above 17 million, so the true figure is a little higher.',
+      src: { label: 'TSMC company profile', url: 'https://investor.tsmc.com/japanese/fundamentals' }, asof: '2025 capacity' }
+  ];
+
+  // <logic>
+  var MULT = { k: 1e3, thousand: 1e3, m: 1e6, million: 1e6, b: 1e9, billion: 1e9, t: 1e12, trillion: 1e12 };
+
+  function tokenize(src) {
+    var s = String(src).toLowerCase().replace(/,/g, '');
+    var out = [], i = 0;
+    while (i < s.length) {
+      var c = s.charAt(i);
+      if (/\s/.test(c)) { i++; continue; }
+      var m = /^(\d+\.?\d*|\.\d+)(e[+-]?\d+)?/.exec(s.slice(i));
+      if (m) {
+        var n = parseFloat(m[0]); i += m[0].length;
+        var sm = /^\s*(thousand|million|billion|trillion|k|m|b|t)(?![a-z])/.exec(s.slice(i));
+        if (sm) { n *= MULT[sm[1]]; i += sm[0].length; }
+        out.push({ n: n }); continue;
+      }
+      if (c === '×' || c === 'x' || c === '*') { out.push({ o: '*' }); i++; continue; }
+      if (c === '÷' || c === '/') { out.push({ o: '/' }); i++; continue; }
+      if (c === '−' || c === '–' || c === '-') { out.push({ o: '-' }); i++; continue; }
+      if (c === '+' || c === '^' || c === '(' || c === ')') { out.push({ o: c }); i++; continue; }
+      return null;
+    }
+    return out;
+  }
+
+  function evaluate(src) {
+    var t = tokenize(src);
+    if (!t || !t.length) return null;
+    var p = 0;
+    function peek() { return t[p]; }
+    function expr() {
+      var v = term(); if (v === null) return null;
+      while (peek() && (peek().o === '+' || peek().o === '-')) {
+        var op = t[p++].o, r = term(); if (r === null) return null;
+        v = op === '+' ? v + r : v - r;
+      }
+      return v;
+    }
+    function term() {
+      var v = unary(); if (v === null) return null;
+      while (peek() && (peek().o === '*' || peek().o === '/')) {
+        var op = t[p++].o, r = unary(); if (r === null) return null;
+        v = op === '*' ? v * r : v / r;
+      }
+      return v;
+    }
+    function unary() {
+      if (peek() && peek().o === '-') { p++; var v = unary(); return v === null ? null : -v; }
+      if (peek() && peek().o === '+') { p++; return unary(); }
+      return power();
+    }
+    function power() {
+      var b = atom(); if (b === null) return null;
+      if (peek() && peek().o === '^') { p++; var e = unary(); if (e === null) return null; return Math.pow(b, e); }
+      return b;
+    }
+    function atom() {
+      var k = peek(); if (!k) return null;
+      if (k.n !== undefined) { p++; return k.n; }
+      if (k.o === '(') {
+        p++; var v = expr();
+        if (v === null || !peek() || peek().o !== ')') return null;
+        p++; return v;
+      }
+      return null;
+    }
+    var v = expr();
+    if (v === null || p !== t.length || !isFinite(v)) return null;
+    return v;
+  }
+
+  function multiple(g, a) { return g >= a ? g / a : a / g; }
+  function geoMean(arr) { return Math.exp(arr.reduce(function (s, x) { return s + Math.log(x); }, 0) / arr.length); }
+  function verdict(m) {
+    var label = m <= 1.1 ? 'Bullseye' : m <= 1.5 ? 'Sharp' : m <= 3 ? 'Close' : m <= 10 ? 'Ballpark' : m <= 100 ? 'Wide of the mark' : 'Off by orders of magnitude';
+    var cls = m <= 1.5 ? 'good' : m <= 5 ? 'warn' : 'bad';
+    return { label: label, cls: cls };
+  }
+  function sig(x) { return x >= 100 ? String(Math.round(x)) : x >= 10 ? String(+x.toFixed(1)) : String(+x.toFixed(2)); }
+  function compact(n) {
+    var abs = Math.abs(n);
+    if (abs >= 1e12) return sig(n / 1e12) + ' trillion';
+    if (abs >= 1e9) return sig(n / 1e9) + ' billion';
+    if (abs >= 1e6) return sig(n / 1e6) + ' million';
+    if (abs >= 1000) return Math.round(n).toLocaleString('en-US');
+    return sig(n);
+  }
+  function full(n) { return n >= 1000 ? Math.round(n).toLocaleString('en-US') : sig(n); }
+  function fmtMult(m) {
+    if (m >= 1000) return Math.round(m).toLocaleString('en-US') + '×';
+    return (m < 10 ? m.toFixed(2) : m < 100 ? m.toFixed(1) : String(Math.round(m))) + '×';
+  }
+  function hash(str) { var h = 2166136261 >>> 0; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function rng(seed) {
+    var a = seed;
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function pickSet(seedStr, bank) {
+    var r = rng(hash(seedStr)), idx = [], i, j, tmp;
+    for (i = 0; i < bank.length; i++) idx.push(i);
+    for (i = idx.length - 1; i > 0; i--) { j = Math.floor(r() * (i + 1)); tmp = idx[i]; idx[i] = idx[j]; idx[j] = tmp; }
+    var chosen = [], groups = {};
+    for (i = 0; i < idx.length && chosen.length < 3; i++) {
+      var q = bank[idx[i]];
+      if (q.group && groups[q.group]) continue;
+      chosen.push(q); if (q.group) groups[q.group] = true;
+    }
+    return chosen;
+  }
+  // </logic>
+
+  /* ---------- storage ---------- */
+  var KEY = 'napkin-ticker-v1';
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || { days: {} }; } catch (e) { return { days: {} }; } }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+  var store = load(); if (!store.days) store.days = {};
+
+  /* ---------- date and state ---------- */
+  var now = new Date();
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  var todayKey = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate());
+  var dayNo = Math.max(1, Math.round((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(2026, 9, 24)) / 864e5) + 1);
+
+  var mode = 'daily', set, guesses, i, phase;
+  function startDaily() {
+    mode = 'daily'; set = pickSet(todayKey, Q); guesses = [];
+    var s = store.days[todayKey];
+    if (s && Array.isArray(s.guesses)) guesses = s.guesses.filter(function (n) { return n > 0; }).slice(0, 3);
+    if (guesses.length >= 3) { i = 3; phase = 'done'; } else { i = guesses.length; phase = 'ask'; }
+  }
+  function startPractice() {
+    mode = 'practice'; set = pickSet('practice-' + Date.now() + '-' + Math.random(), Q); guesses = []; i = 0; phase = 'ask';
+  }
+
+  /* ---------- rendering ---------- */
+  var elMeta = document.getElementById('meta'), elTape = document.getElementById('tape'), elStage = document.getElementById('stage');
+
+  function renderMeta() {
+    var d = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    elMeta.textContent = mode === 'daily' ? 'No. ' + String(dayNo).padStart(3, '0') + ' · ' + d : 'Practice set';
+  }
+
+  function renderTape() {
+    var html = '';
+    for (var k = 0; k < 3; k++) {
+      var cls = 'cell', val = '—';
+      if (k < guesses.length) {
+        var m = multiple(guesses[k], set[k].answer);
+        cls += ' ' + verdict(m).cls; val = fmtMult(m);
+      } else if (k === i && phase !== 'done') { cls += ' now'; val = 'now'; }
+      html += '<div class="' + cls + '"><span class="lab">Q' + (k + 1) + '</span><span class="val">' + val + '</span></div>';
+    }
+    elTape.innerHTML = html;
+  }
+
+  function cardHead(q, n) {
+    return '<div class="card-head"><span class="chip">' + q.topic + '</span><span class="qno">Q' + n + ' / 3</span></div><h2 class="q">' + q.q + '</h2>';
+  }
+
+  function renderAsk(focus) {
+    var q = set[i];
+    elStage.innerHTML =
+      '<section class="card">' + cardHead(q, i + 1) +
+      '<form id="f" novalidate><div class="field"><label class="sr" for="guess">Your estimate</label>' +
+      '<input id="guess" type="text" inputmode="decimal" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="your estimate">' +
+      '<span class="unit">' + q.unit + '</span></div>' +
+      '<output id="preview" class="preview" aria-live="polite"></output>' +
+      '<div class="actions"><button type="submit" class="btn primary">Lock it in</button>' +
+      '<button type="button" class="btn ghost" id="calcBtn" aria-expanded="false" aria-controls="keypad">Calculator</button></div>' +
+      '<div class="keypad" id="keypad" hidden>' + keypadHtml() + '</div>' +
+      '<p class="hint" id="hint" hidden>Tip: type 2.5b or 8*365*1e6 straight into the box.</p></form></section>';
+
+    var input = document.getElementById('guess'), preview = document.getElementById('preview');
+    var form = document.getElementById('f'), kp = document.getElementById('keypad'), calcBtn = document.getElementById('calcBtn'), hint = document.getElementById('hint');
+
+    function updatePreview() {
+      var v = input.value.trim();
+      preview.className = 'preview';
+      if (!v) { preview.textContent = ''; return; }
+      var n = evaluate(v);
+      if (n === null) { preview.textContent = 'Keep typing. Try 2.5b or 8*365*1e6.'; preview.className = 'preview err'; return; }
+      if (n <= 0) { preview.textContent = 'Use a number above zero.'; preview.className = 'preview err'; return; }
+      preview.textContent = '= ' + compact(n);
+    }
+    input.addEventListener('input', updatePreview);
+
+    calcBtn.addEventListener('click', function () {
+      var open = kp.hidden; kp.hidden = !open; hint.hidden = !open;
+      calcBtn.setAttribute('aria-expanded', String(open));
+    });
+
+    kp.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-k]'); if (!b) return;
+      var k = b.getAttribute('data-k');
+      var s = input.selectionStart == null ? input.value.length : input.selectionStart;
+      var en = input.selectionEnd == null ? s : input.selectionEnd;
+      if (k === 'back') {
+        if (s !== en) { input.value = input.value.slice(0, s) + input.value.slice(en); }
+        else if (s > 0) { input.value = input.value.slice(0, s - 1) + input.value.slice(s); s--; }
+        input.setSelectionRange(s, s);
+      } else if (k === 'clear') { input.value = ''; }
+      else if (k === 'eq') {
+        var n = evaluate(input.value);
+        if (n !== null && n > 0) { input.value = String(+n.toPrecision(12)); }
+      } else {
+        input.value = input.value.slice(0, s) + k + input.value.slice(en);
+        input.setSelectionRange(s + k.length, s + k.length);
+      }
+      updatePreview();
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var n = evaluate(input.value);
+      if (n === null || n <= 0) { updatePreview(); if (!input.value.trim()) { preview.textContent = 'Enter a guess first.'; preview.className = 'preview err'; } input.focus(); return; }
+      guesses.push(n);
+      recordGuess(set[i].id, n);
+      if (mode === 'daily') {
+        var rec = store.days[todayKey] || {}; rec.guesses = guesses.slice();
+        if (guesses.length === 3) rec.score = geoMean(guesses.map(function (g, k) { return multiple(g, set[k].answer); }));
+        store.days[todayKey] = rec; save();
+      }
+      phase = 'reveal'; render(true);
+    });
+
+    if (focus) input.focus();
+  }
+
+  function keypadHtml() {
+    var rows = [
+      ['7', '8', '9', ['/', '÷', 'op'], ['back', '⌫', 'op']],
+      ['4', '5', '6', ['*', '×', 'op'], ['clear', 'C', 'op']],
+      ['1', '2', '3', ['-', '−', 'op'], ['(', '(', 'op']],
+      ['0', '.', ['+', '+', 'op'], ['^', '^', 'op'], [')', ')', 'op']],
+      [['k', 'k', 'op'], ['m', 'M', 'op'], ['b', 'B', 'op'], ['t', 'T', 'op'], ['eq', '=', 'eq']]
+    ];
+    var h = '';
+    rows.forEach(function (r) {
+      r.forEach(function (c) {
+        var key = typeof c === 'string' ? c : c[0], label = typeof c === 'string' ? c : c[1], cls = typeof c === 'string' ? '' : c[2];
+        var aria = { back: 'Backspace', clear: 'Clear', eq: 'Calculate', k: 'thousand', m: 'million', b: 'billion', t: 'trillion', '/': 'divide', '*': 'times', '-': 'minus', '+': 'plus', '^': 'power' }[key];
+        h += '<button type="button" class="key ' + cls + '" data-k="' + key + '"' + (aria ? ' aria-label="' + aria + '"' : '') + '>' + label + '</button>';
+      });
+    });
+    return h;
+  }
+
+  /* ---------- other players (shared db) ---------- */
+  var cmp = { state: 'loading', db: null, uidP: Promise.resolve(null), uid: null, docs: [], ready: false, readOnly: false, queue: Promise.resolve() };
+
+  function initDb() {
+    if (!window.claude || typeof window.claude.use !== 'function') { cmp.state = 'off'; return; }
+    Promise.all([window.claude.use('db'), window.claude.use('user')]).then(function (r) {
+      var db = r[0], user = r[1];
+      if (!db) { cmp.state = 'off'; refreshCompare(false); return; }
+      cmp.db = db; cmp.state = 'on';
+      cmp.uidP = user ? user.id().then(function (id) { cmp.uid = id; refreshCompare(false); return id; }) : Promise.resolve(null);
+      try {
+        db.collection('plays').limit(1000).onSnapshot(function (snap) {
+          cmp.docs = snap.docs; cmp.ready = true; refreshCompare(false);
+        }, function () { cmp.state = 'off'; refreshCompare(false); });
+      } catch (e) { cmp.state = 'off'; }
+      refreshCompare(false);
+    }, function () { cmp.state = 'off'; refreshCompare(false); });
+  }
+
+  function validNum(x) { return typeof x === 'number' && isFinite(x) && x > 0 && x < 1e21; }
+
+  function othersFor(qid) {
+    var out = [];
+    cmp.docs.forEach(function (d) {
+      if (d.id === cmp.uid) return;
+      var body = d.data(), g = body && body.g;
+      if (g && typeof g === 'object' && validNum(g[qid])) out.push(g[qid]);
+    });
+    return out;
+  }
+
+  function recordGuess(qid, guess) {
+    if (!cmp.db) return;
+    cmp.queue = cmp.queue.then(function () { return cmp.uidP; }).then(function (uid) {
+      if (!uid) return;
+      var ref = cmp.db.doc('plays/' + uid);
+      return ref.get().then(function (s) {
+        var body = s.exists ? s.data() : null, g = {};
+        if (body && body.g && typeof body.g === 'object') Object.keys(body.g).forEach(function (k) { g[k] = body.g[k]; });
+        if (validNum(g[qid])) return;
+        g[qid] = guess;
+        return ref.set({ g: g, updated: Date.now() });
+      });
+    }).catch(function (e) {
+      if (e && (e.code === 'invalid_argument' || e.code === 'not_granted')) { cmp.readOnly = true; refreshCompare(false); }
+    });
+  }
+
+  function shortNum(n) {
+    var a = Math.abs(n), u = [[1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'K']];
+    for (var k = 0; k < u.length; k++) if (a >= u[k][0]) return sig(n / u[k][0]) + u[k][1];
+    return sig(n);
+  }
+
+  function rankHtml(q, g) {
+    if (cmp.state === 'off') return '';
+    if (cmp.state === 'loading' || !cmp.ready) return 'Checking other players…';
+    var others = othersFor(q.id);
+    if (!others.length) return 'You’re the first to answer this one.';
+    var mine = multiple(g, q.answer), beaten = 0;
+    others.forEach(function (o) { var m = multiple(o, q.answer); if (m > mine) beaten += 1; else if (m === mine) beaten += 0.5; });
+    var pct = Math.round(100 * beaten / others.length);
+    return 'Closer than <b>' + pct + '%</b> of ' + (others.length === 1 ? 'the 1 other player' : 'the ' + others.length + ' other players');
+  }
+
+  function histHtml(q, g, anim) {
+    var a = q.answer, you = Math.log10(g / a);
+    var others = (cmp.state === 'on' && cmp.ready) ? othersFor(q.id) : [];
+    var logs = others.map(function (o) { return Math.log10(o / a); });
+    var far = Math.abs(you); logs.forEach(function (l) { far = Math.max(far, Math.abs(l)); });
+    var span = Math.max(1, Math.min(3, Math.ceil(far - 1e-9)));
+    function pos(l) { return (Math.max(-span, Math.min(span, l)) + span) / (2 * span); }
+    var BINS = 21, counts = [], k;
+    for (k = 0; k < BINS; k++) counts.push(0);
+    logs.forEach(function (l) { counts[Math.min(BINS - 1, Math.floor(pos(l) * BINS))]++; });
+    var max = Math.max.apply(null, counts), bars = '';
+    for (k = 0; k < BINS; k++) {
+      var hgt = max ? Math.max(counts[k] ? 8 : 0, counts[k] / max * 100) : 0;
+      bars += '<span style="height:' + hgt.toFixed(1) + '%;animation-delay:' + (k * 18) + 'ms"></span>';
+    }
+    var yp = pos(you) * 100, tagp = Math.max(10, Math.min(90, yp));
+    var note = '';
+    if (cmp.state === 'off') note = 'Comparison with other players isn’t available in this view.';
+    else if (cmp.state === 'loading' || !cmp.ready) note = 'Loading other players’ guesses…';
+    else if (!others.length) note = 'No one else has answered this yet. Their guesses will show up here.';
+    if (cmp.readOnly) note += (note ? ' ' : '') + 'You have view-only access, so your guess isn’t added for others.';
+    var cls = verdict(multiple(g, a)).cls;
+    return '<h3 class="sec-h">How everyone guessed</h3>' +
+      '<div class="plot ' + cls + '" role="img" aria-label="Histogram of ' + others.length + ' other players’ guesses on a log scale, with your guess and the answer marked">' +
+      '<div class="bars' + (anim ? ' anim' : '') + '">' + bars + '</div>' +
+      '<span class="ansline"></span>' +
+      '<span class="youline" style="left:' + yp.toFixed(2) + '%"></span>' +
+      '<span class="youtag" style="left:' + tagp.toFixed(2) + '%"><span>You</span></span></div>' +
+      '<div class="axis"><span>' + shortNum(a / Math.pow(10, span)) + '</span><b>' + shortNum(a) + '<small>ANSWER</small></b><span>' + shortNum(a * Math.pow(10, span)) + '</span></div>' +
+      (note ? '<p class="hist-note">' + note + '</p>' : '');
+  }
+
+  function refreshCompare(anim) {
+    if (phase !== 'reveal') return;
+    var q = set[i], g = guesses[i], hist = document.getElementById('hist'), rank = document.getElementById('rank');
+    if (hist) hist.innerHTML = histHtml(q, g, anim);
+    if (rank) { var r = rankHtml(q, g); rank.innerHTML = r; rank.hidden = !r; }
+  }
+
+  function renderReveal() {
+    var q = set[i], g = guesses[i], a = q.answer, m = multiple(g, a), v = verdict(m);
+    var dir = m < 1.005 ? 'Spot on' : g < a ? 'Too low' : 'Too high';
+    var last = i === 2;
+    elStage.innerHTML =
+      '<section class="card">' + cardHead(q, i + 1) +
+      '<div class="result">' +
+      '<div class="boxes">' +
+      '<div class="box mine"><span class="k">You guessed</span><span class="v">' + compact(g) + '</span><span class="full">' + full(g) + '</span></div>' +
+      '<div class="box truth"><span class="k">Answer</span><span class="v">' + compact(a) + '</span><span class="full">' + full(a) + '</span><span class="u">' + q.unit + '</span></div></div>' +
+      '<div class="landing">' +
+      '<div class="landed ' + v.cls + '"><h3 class="sec-h">You landed</h3><span class="mult">' + fmtMult(m) + '</span><span class="dir">' + dir + '</span><p class="rank" id="rank"></p></div>' +
+      '<div class="hist" id="hist"></div></div>' +
+      '<div class="bottom"><button type="button" class="btn primary" id="next">' + (last ? 'See my score →' : 'Question ' + (i + 2) + ' →') + '</button></div>' +
+      '</div></section>';
+
+    refreshCompare(true);
+    var next = document.getElementById('next');
+    next.addEventListener('click', function () {
+      i++; phase = i >= 3 ? 'done' : 'ask'; render(true);
+    });
+    next.focus({ preventScroll: true });
+  }
+
+  function recordStats() {
+    var scores = [];
+    Object.keys(store.days).forEach(function (k) { var s = store.days[k].score; if (typeof s === 'number' && s >= 1) scores.push(s); });
+    if (!scores.length) return null;
+    return { played: scores.length, best: Math.min.apply(null, scores), avg: geoMean(scores) };
+  }
+
+  function renderDone() {
+    var ms = guesses.map(function (g, k) { return multiple(g, set[k].answer); });
+    var score = geoMean(ms), v = verdict(score);
+    var rows = ms.map(function (m, k) {
+      var q = set[k], g = guesses[k], vv = verdict(m);
+      return '<li><span class="n">Q' + (k + 1) + '</span><span class="t">' + q.q + '<small>You ' + compact(g) + ' · Answer ' + compact(q.answer) + '</small></span>' +
+        '<span class="m ' + vv.cls + '">' + fmtMult(m) + ' ' + (g < q.answer ? '↓' : '↑') + '</span></li>';
+    }).join('');
+    var lines = ms.map(function (m, k) {
+      var c = verdict(m).cls;
+      return (c === 'good' ? '🟩' : c === 'warn' ? '🟨' : '🟥') + ' ' + fmtMult(m) + ' ' + (guesses[k] < set[k].answer ? 'low' : 'high');
+    });
+    var shareText = 'Vinci ' + (mode === 'daily' ? 'No. ' + String(dayNo).padStart(3, '0') : '(practice)') + ' — ' + fmtMult(score) + '\n' + lines.join('\n');
+    var rs = mode === 'daily' ? recordStats() : null;
+    var recHtml = rs ? '<div class="record"><div><span class="k">Days played</span><span class="v">' + rs.played + '</span></div><div><span class="k">Best day</span><span class="v">' + fmtMult(rs.best) + '</span></div><div><span class="k">Average</span><span class="v">' + fmtMult(rs.avg) + '</span></div></div>' : '';
+    var other = mode === 'daily' ? '<button type="button" class="btn ghost" id="practice">Play a practice set</button>' :
+      '<button type="button" class="btn ghost" id="practice">Another practice set</button><button type="button" class="btn ghost" id="back">Back to today</button>';
+    elStage.innerHTML =
+      '<section class="card"><p class="eyebrow">' + (mode === 'daily' ? 'Today’s score' : 'Practice score') + '</p>' +
+      '<div class="big ' + v.cls + '">' + (score < 10 ? score.toFixed(2) : score < 100 ? score.toFixed(1) : Math.round(score).toLocaleString('en-US')) + '<span>×</span></div>' +
+      '<p class="rate-line">' + v.label + '. Geometric mean of your three misses.</p>' +
+      '<ol class="rows">' + rows + '</ol>' +
+      '<div class="share"><h3 class="sec-h">Share</h3><pre id="shareText">' + shareText + '</pre>' +
+      '<div class="actions" style="margin-top:0"><button type="button" class="btn primary" id="copy">Copy result</button><span class="status" id="status" role="status"></span></div></div>' +
+      recHtml + '<div class="actions">' + other + '</div></section>';
+
+    document.getElementById('copy').addEventListener('click', function () {
+      var st = document.getElementById('status'), pre = document.getElementById('shareText');
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(pre);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        st.textContent = 'Selected. Copy it from your menu.'; st.style.color = 'var(--muted)';
+      }
+      try {
+        if (!navigator.clipboard || !navigator.clipboard.writeText) { fallback(); return; }
+        navigator.clipboard.writeText(shareText).then(function () { st.textContent = 'Copied'; st.style.color = 'var(--good)'; }, fallback);
+      } catch (e) { fallback(); }
+    });
+    document.getElementById('practice').addEventListener('click', function () { startPractice(); render(true); window.scrollTo(0, 0); });
+    var back = document.getElementById('back');
+    if (back) back.addEventListener('click', function () { startDaily(); render(false); window.scrollTo(0, 0); });
+  }
+
+  function render(focus) {
+    renderMeta(); renderTape();
+    if (phase === 'ask') renderAsk(focus);
+    else if (phase === 'reveal') renderReveal();
+    else renderDone();
+  }
+
+  initDb();
+  startDaily();
+  render(false);
+})();
+</script>

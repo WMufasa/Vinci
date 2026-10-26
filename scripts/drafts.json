@@ -1,0 +1,378 @@
+[
+  {
+    "id": "semis",
+    "topic": "CHIPS",
+    "q": "On average, how many dollars of semiconductors were sold worldwide every second in 2025?",
+    "unit": "US dollars per second",
+    "answer": 25228,
+    "napkin": "Chip sales are somewhere around $800 billion a year, and a year has about 31.5 million seconds.",
+    "note": "WSTS reports $795.6 billion for 2025. Divided by the 31,536,000 seconds in a year, that is about $25,200 a second. The Semiconductor Industry Association's earlier figure was $791.7 billion.",
+    "src": {
+      "label": "WSTS, Global Semiconductor Market grows 26% in 2025",
+      "url": "https://www.wsts.org/76/103/Global-Semiconductor-Market-grows-26-in-2025-to-796B"
+    },
+    "asof": "2025 full year, final WSTS data (March 2026)",
+    "group": "revenue"
+  },
+  {
+    "id": "visatx",
+    "group": "visa",
+    "topic": "MARKETS",
+    "q": "On average, how many transactions did Visa process every second in its 2025 fiscal year?",
+    "unit": "transactions per second",
+    "answer": 8165,
+    "napkin": "Hundreds of billions of transactions a year, divided by about 31.5 million seconds.",
+    "note": "Visa reports 257.5 billion transactions for fiscal 2025. That is about 8,165 a second on average. The network can handle far more at peak, so the average is well below capacity.",
+    "src": {
+      "label": "Visa fiscal 2025 annual report",
+      "url": "https://s29.q4cdn.com/385744025/files/doc_downloads/2025/Visa-Fiscal-2025-Annual-Report.pdf"
+    },
+    "asof": "Fiscal 2025 (to September 2025)"
+  },
+  {
+    "id": "visaavg",
+    "group": "visa",
+    "topic": "MARKETS",
+    "q": "On average, how many dollars was each transaction on Visa's network worth in fiscal 2025?",
+    "unit": "US dollars per transaction",
+    "answer": 64.85,
+    "napkin": "Most card payments are everyday purchases of a few dollars to a few hundred, so an average somewhere around $50 to $100.",
+    "note": "Visa reports $16.7 trillion of total volume over 257.5 billion transactions, which is about $64.85 each. Both figures include cash withdrawals as well as purchases.",
+    "src": {
+      "label": "Visa fiscal 2025 annual report",
+      "url": "https://s29.q4cdn.com/385744025/files/doc_downloads/2025/Visa-Fiscal-2025-Annual-Report.pdf"
+    },
+    "asof": "Fiscal 2025 (to September 2025)"
+  },
+  {
+    "id": "tesla",
+    "topic": "MARKETS",
+    "q": "How many vehicles did Tesla deliver in 2025?",
+    "unit": "vehicles",
+    "answer": 1636129,
+    "napkin": "Tesla delivered about 1.8 million in 2024 and sales fell in 2025, so somewhere around 1.6 million.",
+    "note": "Down 8.6% from 1,789,226 in 2024, after the US federal EV tax credit ended on September 30, 2025. This figure comes from secondary coverage of Tesla's own release.",
+    "src": {
+      "label": "Not a Tesla App, Tesla Q4 2025 report",
+      "url": "https://www.notateslaapp.com/news/3468/tesla-reports-q4-delivery-numbers-narrowly-misses-on-deliveries-energy-hits-record"
+    },
+    "asof": "2025 full year"
+  },
+  {
+    "id": "phones",
+    "topic": "TECH",
+    "q": "On average, how many smartphones were shipped worldwide every minute in 2025?",
+    "unit": "smartphones per minute",
+    "answer": 2397,
+    "napkin": "About 1.25 billion phones a year, and a year has about 525,600 minutes.",
+    "note": "IDC reports about 1.26 billion shipments for 2025. Divided by the 525,600 minutes in a year, that is about 2,400 a minute. Omdia counted 1.25 billion.",
+    "src": {
+      "label": "IDC smartphone tracker, January 2026",
+      "url": "https://www.idc.com/?p=107472"
+    },
+    "asof": "2025 full year, preliminary"
+  },
+  {
+    "id": "domains",
+    "topic": "TECH",
+    "q": "What percentage of all registered domain names end in .com or .net?",
+    "unit": "percent",
+    "answer": 44.6,
+    "napkin": ".com is by far the biggest extension, with hundreds of rivals splitting the rest.",
+    "note": "Verisign's Q2 2026 report counts 179.1 million .com and .net names out of 401.6 million in total, which is 44.6%. The figures are from June 30, 2026.",
+    "src": {
+      "label": "Verisign Q2 2026 Domain Name Industry Brief",
+      "url": "https://blog.verisign.com/domain-names/q2-2026-domain-name-industry-brief-quarterly-report/"
+    },
+    "asof": "June 30, 2026"
+  },
+  {
+    "id": "starlink",
+    "topic": "TECH",
+    "q": "How many Starlink satellites are active in orbit?",
+    "unit": "satellites",
+    "answer": 10838,
+    "napkin": "SpaceX launches about 25 satellites per Falcon 9 and flies one every few days, so a few thousand a year, on top of the 10,000 reached in March 2026.",
+    "note": "KeepTrack, a third-party tracker, counted 11,131 in orbit and 10,838 active in October 2026. Its catalog lags recent launches, so the true number is higher. This is not an official SpaceX figure.",
+    "src": {
+      "label": "KeepTrack, Starlink satellite count",
+      "url": "https://keeptrack.space/starlink-satellite-count"
+    },
+    "asof": "October 2026, KeepTrack"
+  },
+  {
+    "id": "hashrate",
+    "topic": "CRYPTO",
+    "q": "What was the Bitcoin network's average hashrate over the 30 days to the end of August 2026?",
+    "unit": "exahashes per second",
+    "answer": 912,
+    "napkin": "It passed 1,000 EH/s in January 2026 and has been in the high hundreds since.",
+    "note": "Hashrate Index gives a 30-day average of 912 EH/s and a 7-day average of 915 EH/s at August 31, 2026. Hashrate is estimated, not measured directly, so sources differ. One estimate for August 26 was about 860.",
+    "src": {
+      "label": "Hashrate Index roundup, August 31, 2026",
+      "url": "https://hashrateindex.com/blog/hashrate-index-roundup-august-17-2026-2/"
+    },
+    "asof": "30 days to August 31, 2026"
+  },
+  {
+    "id": "btcnew",
+    "topic": "CRYPTO",
+    "q": "How many new bitcoin are created every day?",
+    "unit": "bitcoin per day",
+    "answer": 450,
+    "napkin": "A block arrives about every 10 minutes, so 144 a day. Each block creates a fixed reward that halves every four years, and it is a few bitcoin now.",
+    "note": "The reward is 3.125 bitcoin per block since the April 2024 halving, and there are about 144 blocks a day, so about 450. The next halving is expected in 2028.",
+    "src": {
+      "label": "Mudrex Learn, citing August 2026 data",
+      "url": "https://mudrex.com/learn/?p=88362"
+    },
+    "asof": "2026, until the next halving"
+  },
+  {
+    "id": "nvrev",
+    "group": "revenue",
+    "topic": "CHIPS",
+    "q": "On average, how many dollars of revenue did Nvidia earn every second in its 2026 fiscal year?",
+    "unit": "US dollars per second",
+    "answer": 6846,
+    "napkin": "Nvidia made around $200 billion that year, divided by about 31.5 million seconds.",
+    "note": "Nvidia reported $215.9 billion for fiscal 2026, which ended January 25, 2026. That works out to about $6,850 a second.",
+    "src": {
+      "label": "Nvidia Q4 and fiscal 2026 results (SEC 8-K)",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000019/q4fy26pr.htm"
+    },
+    "asof": "Fiscal 2026"
+  },
+  {
+    "id": "nvdc",
+    "group": "revenue",
+    "topic": "CHIPS",
+    "q": "What percentage of Nvidia's fiscal 2026 revenue came from its Data Center segment?",
+    "unit": "percent",
+    "answer": 89.7,
+    "napkin": "Gaming and other businesses are small next to AI chips now, so most of the revenue is data center.",
+    "note": "Data Center was $193.7 billion of $215.9 billion total, which is 89.7%.",
+    "src": {
+      "label": "Nvidia Q4 and fiscal 2026 results (SEC 8-K)",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000019/q4fy26pr.htm"
+    },
+    "asof": "Fiscal 2026"
+  },
+  {
+    "id": "tsmcrev",
+    "topic": "CHIPS",
+    "q": "On average, how many dollars of revenue did TSMC earn every second in 2025?",
+    "unit": "US dollars per second",
+    "answer": 3882,
+    "napkin": "TSMC made roughly $120 billion in 2025, divided by about 31.5 million seconds.",
+    "note": "TSMC's 2025 revenue was about $122.4 billion (NT$3.81 trillion), which is about $3,880 a second. The dollar figure comes from secondary coverage of TSMC's results, so check TSMC's own release.",
+    "src": {
+      "label": "TelecomLead, TSMC 2025 results",
+      "url": "https://telecomlead.com/semiconductor/tsmc-delivers-record-2025-revenue-and-profit-as-ai-chip-demand-fuels-growth-us-expansion-accelerates-124150"
+    },
+    "asof": "2025 full year",
+    "group": "revenue"
+  },
+  {
+    "id": "hynix",
+    "topic": "CHIPS",
+    "q": "What percentage of the world's DRAM sales did SK hynix make in the third quarter of 2025?",
+    "unit": "percent",
+    "answer": 33.2,
+    "napkin": "Three makers (SK hynix, Samsung and Micron) split most of the market, so the leader has around a third.",
+    "note": "TrendForce reports SK hynix had $13.75 billion of $41.4 billion, a 33.2% share, just ahead of Samsung at 32.6%.",
+    "src": {
+      "label": "Evertiq, citing TrendForce",
+      "url": "https://evertiq.com/design/2025-11-26-global-dram-revenue-jumps-309-in-3q25"
+    },
+    "asof": "Q3 2025"
+  },
+  {
+    "id": "asml",
+    "topic": "CHIPS",
+    "q": "How many new lithography machines did ASML sell in 2025?",
+    "unit": "machines",
+    "answer": 300,
+    "napkin": "These machines cost tens of millions to hundreds of millions each, and ASML makes about $30 billion a year, so a few hundred.",
+    "note": "Heise reports ASML sold 300 new and 27 refurbished systems in 2025, 91 fewer than in 2024. These are all lithography systems, not only the EUV models. The count is from secondary coverage, so check ASML's annual report.",
+    "src": {
+      "label": "Heise, ASML record orders",
+      "url": "https://heise.de/-11157655"
+    },
+    "asof": "2025 full year"
+  },
+  {
+    "id": "chatgpt",
+    "topic": "TECH",
+    "q": "What percentage of ChatGPT's weekly users pay for a subscription?",
+    "unit": "percent",
+    "answer": 5.6,
+    "napkin": "Most people use free AI chat. A small slice pay, probably under one in ten.",
+    "note": "OpenAI announced 900 million weekly users and 50 million paying subscribers on February 27, 2026, which is 5.6%. Weekly users and subscribers are different measures, so this is a rough ratio.",
+    "src": {
+      "label": "TechCrunch, ChatGPT reaches 900M weekly active users",
+      "url": "https://techcrunch.com/2026/02/27/chatgpt-reaches-900m-weekly-active-users"
+    },
+    "asof": "February 2026",
+    "group": "users"
+  },
+  {
+    "id": "spotify",
+    "topic": "TECH",
+    "q": "What percentage of Spotify's monthly active users pay for Premium?",
+    "unit": "percent",
+    "answer": 38.6,
+    "napkin": "Spotify has a large free tier, so perhaps a third to a half pay.",
+    "note": "Spotify reported 300 million Premium subscribers and 777 million monthly active users in Q2 2026, which is 38.6%.",
+    "src": {
+      "label": "Spotify Q2 2026 results (SEC 6-K)",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001639920/000114036126031044/ef20078867_ex99-1.htm"
+    },
+    "asof": "Q2 2026",
+    "group": "users"
+  },
+  {
+    "id": "wikien",
+    "topic": "TECH",
+    "q": "How many articles does the English Wikipedia have?",
+    "unit": "articles",
+    "answer": 7250000,
+    "napkin": "It passed 7 million in May 2025 and grows by roughly 150,000 to 200,000 a year.",
+    "note": "The count on the English Wikipedia page was 7,250,570 when checked. It changes daily, so update it from Wikipedia:Statistics shortly before publishing.",
+    "src": {
+      "label": "English Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/English_Wikipedia"
+    },
+    "asof": "October 2026"
+  },
+  {
+    "id": "hfmodels",
+    "topic": "CODE",
+    "q": "How many public models are hosted on the Hugging Face Hub?",
+    "unit": "models",
+    "answer": 3012377,
+    "napkin": "It had about 2.4 million in January 2026 and has been adding over a million a year.",
+    "note": "One third-party tally counts 3,012,377 on August 22, 2026, and Hugging Face's own summer 2026 report says about 2.96 million. The count is live and grows daily.",
+    "src": {
+      "label": "Voxbooster Hugging Face statistics 2026 (third-party tally)",
+      "url": "https://voxbooster.com/blog/hugging-face-model-downloads-statistics-2026/"
+    },
+    "asof": "August 2026"
+  },
+  {
+    "id": "ipos",
+    "topic": "MARKETS",
+    "q": "How many companies went public on US stock exchanges in 2025?",
+    "unit": "IPOs",
+    "answer": 202,
+    "napkin": "A normal year has 150 to 250 sizeable IPOs and 2025 was a recovery year.",
+    "note": "Renaissance Capital counts 202 IPOs raising $44.0 billion. It excludes SPACs, closed-end funds and companies below a $50 million market cap, and other counts including SPACs reach 354.",
+    "src": {
+      "label": "Renaissance Capital, 2025 US IPO Review",
+      "url": "https://www.renaissancecapital.com/review/2025USReview_Public.pdf"
+    },
+    "asof": "2025 full year"
+  },
+  {
+    "id": "etfs",
+    "topic": "MARKETS",
+    "q": "How many exchange-traded funds were there in the United States at the end of 2025?",
+    "unit": "ETFs",
+    "answer": 4813,
+    "napkin": "The US passed 4,000 ETFs in 2024 and new launches keep coming, so about 4,500 to 5,000.",
+    "note": "The ICI 2026 Fact Book says 4,813 including ETFs that invest in other ETFs. An ICI FAQ page gives 4,495 for US-domiciled ETFs, so the definition matters.",
+    "src": {
+      "label": "ICI 2026 Fact Book, chapter 2",
+      "url": "https://icifactbook.org/pdf/2026-factbook-ch2.pdf"
+    },
+    "asof": "End of 2025"
+  },
+  {
+    "id": "vc",
+    "topic": "MARKETS",
+    "q": "On average, how many dollars of venture and growth funding did startups raise worldwide every second in 2025?",
+    "unit": "US dollars per second",
+    "answer": 13477,
+    "napkin": "A few hundred billion dollars a year, divided by about 31.5 million seconds.",
+    "note": "Crunchbase says about $425 billion in 2025, which is about $13,500 a second. CB Insights says $469 billion and PitchBook and KPMG say over $512 billion, so every tracker differs. The Crunchbase figure is relayed by secondary sources.",
+    "src": {
+      "label": "Crunchbase News, 2025 year-end funding",
+      "url": "https://news.crunchbase.com/fintech/funding-jumped-big-checks-ai-ye-2025/"
+    },
+    "asof": "2025 full year, Crunchbase",
+    "group": "revenue"
+  },
+  {
+    "id": "applerev",
+    "topic": "MARKETS",
+    "q": "On average, how many dollars of sales did Apple make every second in its 2025 fiscal year?",
+    "unit": "US dollars per second",
+    "answer": 13196,
+    "napkin": "Apple makes around $400 billion a year, divided by about 31.5 million seconds.",
+    "note": "Apple reported $416.2 billion for fiscal 2025, which is about $13,200 a second. Its fiscal year is 52 weeks, so the exact figure is a fraction of a percent higher.",
+    "src": {
+      "label": "Apple Form 10-K, fiscal 2025",
+      "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm"
+    },
+    "asof": "Fiscal 2025",
+    "group": "revenue"
+  },
+  {
+    "id": "aws",
+    "group": "revenue",
+    "topic": "TECH",
+    "q": "On average, how many dollars of revenue did Amazon Web Services earn every second in 2025?",
+    "unit": "US dollars per second",
+    "answer": 4081,
+    "napkin": "AWS makes more than $100 billion a year, divided by about 31.5 million seconds.",
+    "note": "AWS reported $128.7 billion for 2025, which is about $4,080 a second.",
+    "src": {
+      "label": "Amazon Q4 2025 results",
+      "url": "https://www.businesswire.com/news/home/20260204777163/en/Amazon.com-Announces-Fourth-Quarter-Results"
+    },
+    "asof": "2025 full year"
+  },
+  {
+    "id": "amazon",
+    "group": "revenue",
+    "topic": "MARKETS",
+    "q": "On average, how many dollars of sales did Amazon make every second in 2025?",
+    "unit": "US dollars per second",
+    "answer": 22733,
+    "napkin": "Amazon sells hundreds of billions a year, divided by about 31.5 million seconds.",
+    "note": "Amazon reported $716.9 billion in net sales for 2025, which is about $22,700 a second.",
+    "src": {
+      "label": "Amazon Q4 2025 results",
+      "url": "https://www.businesswire.com/news/home/20260204777163/en/Amazon.com-Announces-Fourth-Quarter-Results"
+    },
+    "asof": "2025 full year"
+  },
+  {
+    "id": "dcpower",
+    "topic": "TECH",
+    "q": "How much electricity did data centers around the world use in 2025?",
+    "unit": "terawatt-hours",
+    "answer": 485,
+    "napkin": "The whole world uses about 30,000 TWh a year, and data centers are in the region of 1.5 to 2% of that.",
+    "note": "The IEA estimated 416 TWh in 2024 and about 485 TWh in 2025, with 155 TWh for AI-focused sites. An earlier IEA rounding says about 500. These are estimates, relayed by Our World in Data.",
+    "src": {
+      "label": "Our World in Data, citing the IEA",
+      "url": "https://ourworldindata.org/how-much-energy-do-data-centers-and-artificial-intelligence-use"
+    },
+    "asof": "2025 estimate"
+  },
+  {
+    "id": "internet",
+    "topic": "TECH",
+    "q": "What percentage of the world's people used the internet in 2025?",
+    "unit": "percent",
+    "answer": 74,
+    "napkin": "Most of the world is online by now, with large offline pockets in poorer regions.",
+    "note": "The ITU says about three-quarters of the world, roughly 6 billion people, were online in 2025. The 74% figure comes from secondary coverage of the full report, so check it against the ITU report.",
+    "src": {
+      "label": "ITU, Facts and Figures 2025",
+      "url": "https://www.itu.int/en/mediacentre/Pages/PR-2025-11-17-Facts-and-Figures.aspx"
+    },
+    "asof": "2025 estimate"
+  }
+]
